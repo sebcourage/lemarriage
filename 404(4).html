@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ef6f68">
+<title>Les Loulous se marient !</title>
+<style>
+:root{--coral:#ef6f68;--sun:#f5b64f;--cream:#fff5df;--turq:#4fb6b5;--deep:#173e59;--paper:#f9edd7;--ok:#4f8b65;--bad:#b85c5c}
+*{box-sizing:border-box}body{margin:0;background:#e9dfcf;color:var(--deep);font-family:Arial,Helvetica,sans-serif}
+main{max-width:470px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 40px #0002}
+section{display:none;min-height:100vh;padding:22px;flex-direction:column}section.active{display:flex}
+.poster{margin:-22px -22px 20px;min-height:420px;position:relative;overflow:hidden;background:linear-gradient(#bd4f7c 0%,var(--coral) 27%,var(--sun) 52%,#f9c56e 57%,var(--turq) 58%,#2d91a5 100%)}
+.sun{position:absolute;width:160px;height:160px;border-radius:50%;left:30px;top:150px;background:#ffd26a}
+.sun:after{content:"";position:absolute;left:-40px;right:-40px;top:70px;height:70px;background:repeating-linear-gradient(0deg,rgba(239,111,104,.9) 0 6px,transparent 6px 13px)}
+.island{position:absolute;left:85px;bottom:98px;width:210px;height:118px;background:var(--deep);clip-path:polygon(0 100%,12% 70%,25% 61%,34% 25%,49% 0,63% 25%,78% 40%,100% 90%,100% 100%)}
+.title{position:absolute;left:0;right:0;top:28px;text-align:center;color:var(--cream);font:900 54px/.82 Georgia,serif}
+.title small{display:block;font:28px cursive;color:#ffd26a;margin-top:12px}
+.ribbon{position:absolute;left:22px;right:22px;bottom:18px;background:rgba(16,45,67,.92);color:var(--cream);padding:12px;text-align:center;font-weight:900}
+h1,h2{font-family:Georgia,serif;text-transform:uppercase}h1{font-size:32px}h2{font-size:25px;line-height:1.2}
+.btn{display:block;width:100%;padding:15px;border:3px solid var(--deep);box-shadow:5px 5px 0 var(--deep);font-weight:900;text-transform:uppercase;text-align:center;cursor:pointer}
+.primary{background:var(--coral);color:var(--cream)}.secondary{background:var(--cream);color:var(--deep)}.danger{background:#b85c5c;color:white}
+.actions{display:grid;gap:12px;margin-top:auto}.field{display:grid;gap:7px;margin:14px 0}.field input,.field select{padding:14px;border:3px solid var(--deep);background:var(--cream);font-size:16px}
+.card{background:var(--cream);border:3px solid var(--deep);padding:18px;box-shadow:6px 6px 0 var(--turq)}
+.answer{display:block;width:100%;padding:13px;border:3px solid var(--deep);background:var(--cream);font-weight:900;text-align:left;margin:9px 0}
+.answer.selected{background:#d9eeee}.answer.correct{background:#cde7c9}.answer.wrong{background:#f3c0b8}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{padding:7px 10px;background:var(--sun);border:2px solid var(--deep);font-size:11px;font-weight:900}
+.timer{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:16px auto;background:var(--sun);border:5px solid var(--deep);font-size:24px;font-weight:900}
+.notice{padding:14px;background:#d9eee8;border:3px solid var(--deep);box-shadow:4px 4px 0 var(--sun);font-weight:800;margin:14px 0}
+.row{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--deep);padding:13px;margin:10px 0}
+.row small{display:block;color:#59656b;margin-top:3px}.small{font-size:13px;color:#56646b}.hidden{display:none!important}.center{text-align:center}
+.adminbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.stat{background:var(--cream);border:3px solid var(--deep);padding:12px}.stat strong{display:block;font-size:24px}
+.photo{width:100%;max-height:360px;object-fit:contain;border:3px solid var(--deep);background:#111;margin-bottom:12px}
+.musicbox{padding:24px;border:3px dashed var(--deep);text-align:center;background:#fff5df;margin-bottom:12px;font-size:45px}
+.qr{width:210px;height:210px;border:8px solid white;outline:3px solid var(--deep);margin:12px auto}
+.status{font-size:13px;font-weight:800;color:#59656b}button:disabled{opacity:.65}
+</style>
+</head>
+<body>
+<main>
+<section id="home" class="active">
+<div class="poster"><div class="title">LES<br>LOULOUS<small>se marient !</small></div><div class="sun"></div><div class="island"></div><div class="ribbon">Le quiz officiel · Riviera Édition</div></div>
+<p class="center"><b>Cinéma · souvenirs · photos · blind test</b></p>
+<div id="connectionStatus" class="notice">Connexion à la partie…</div>
+<div class="actions"><button class="btn primary" onclick="show('join')">Rejoindre la partie</button><button class="btn secondary" onclick="show('adminLogin')">Espace administrateur</button></div>
+</section>
+
+<section id="join">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Invité</span></div>
+<h1>Rejoindre</h1>
+<label class="field"><b>Nom d’équipe</b><input id="teamName" placeholder="Les Cactus" maxlength="30"></label>
+<label class="field"><b>Groupe</b><select id="teamGroup"><option>Famille d’Agathe</option><option>Famille de Julien</option><option>Amis des Loulous</option></select></label>
+<label class="field"><b>Code de la partie</b><input id="gameCode" value="LOULOU" maxlength="10"></label>
+<div id="joinError" class="notice hidden"></div>
+<div class="actions"><button class="btn primary" id="joinButton" type="button">Rejoindre</button></div>
+</section>
+
+<section id="lobby">
+<div class="top"><span class="pill">Équipe connectée</span><b>●</b></div>
+<div style="margin:auto;text-align:center"><h1>Bienvenue à bord</h1><p id="teamLabel"></p><div class="notice" id="lobbyMessage">En attente du maître du jeu…</div><p><b id="teamCount">0</b> équipes connectées</p></div>
+</section>
+
+<section id="question">
+<div class="top"><span class="pill" id="questionSection"></span><b id="questionNumber"></b></div>
+<div class="timer" id="timer">15</div>
+<div id="questionMedia"></div>
+<div class="card"><p id="questionInstruction"></p><h2 id="questionText"></h2><div id="answers"></div></div>
+<div class="actions"><button class="btn primary" id="sendAnswerBtn" onclick="sendAnswer()">Envoyer la réponse</button></div>
+</section>
+
+<section id="waitingAnswer">
+<div style="margin:auto;text-align:center"><h1>Réponse envoyée</h1><div class="notice">Attendez que le maître du jeu affiche la correction.</div></div>
+</section>
+
+<section id="correction">
+<div class="top"><span class="pill">Correction</span><b id="pointsEarned">+0</b></div>
+<div class="card center" style="margin-top:28px"><h1 id="correctionTitle"></h1><h2 id="correctAnswer"></h2></div>
+<div class="actions"><button class="btn secondary" onclick="show('lobby')">Attendre la suite</button></div>
+</section>
+
+<section id="adminLogin">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Admin</span></div>
+<h1>Maître du jeu</h1>
+<label class="field"><b>Code secret</b><input id="adminCode" type="password" placeholder="••••••"></label>
+<div class="actions"><button class="btn primary" onclick="openAdmin()">Entrer</button></div>
+</section>
+
+<section id="admin">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Poste de pilotage</span></div>
+<h1>Partie LOULOU</h1>
+<img id="qrCode" class="qr" alt="QR code">
+<p class="center small" id="publicUrl"></p>
+<div class="adminbar"><div class="stat"><strong id="adminTeams">0</strong><span>équipes</span></div><div class="stat"><strong id="adminAnswers">0</strong><span>réponses</span></div></div>
+<div class="card"><h2 id="adminQuestionTitle">Prêt à démarrer</h2><p id="adminQuestionMeta" class="small"></p></div>
+<div class="actions">
+<button class="btn primary" onclick="adminNext()">Lancer / question suivante</button>
+<button class="btn secondary" onclick="adminReveal()">Afficher la correction</button>
+<button class="btn secondary" onclick="adminShowRanking()">Afficher le classement</button>
+<button class="btn danger" onclick="adminReset()">Réinitialiser la partie</button>
+</div>
+</section>
+
+<section id="ranking">
+<div class="top"><button onclick="show('admin')">←</button><span class="pill">Classement</span></div>
+<h1>Le podium</h1><div id="rankingRows"></div><div class="notice" id="familyScore"></div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+const firebaseConfig = {"apiKey": "AIzaSyB2-51sID5e7ChRDeZLmn_E9KgmqxzZsf4", "authDomain": "marriage-julien-et-agathe.firebaseapp.com", "projectId": "marriage-julien-et-agathe", "storageBucket": "marriage-julien-et-agathe.firebasestorage.app", "messagingSenderId": "7246207660", "appId": "1:7246207660:web:bbf10f25fcf592709b1d09", "databaseURL": "https://marriage-julien-et-agathe-default-rtdb.europe-west1.firebasedatabase.app"};
+const questions = [{"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Prenez un chewing-gum, Émile. »", "choices": ["La Cité de la peur", "99 francs", "Elephant Man", "Intouchables"], "answer": "La Cité de la peur", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Les cons, ça ose tout. C’est même à ça qu’on les reconnaît. »", "choices": ["Les Tontons flingueurs", "Forrest Gump", "La Cité de la peur", "Le Dîner de cons"], "answer": "Les Tontons flingueurs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Ce soir, je sens que je vais conclure. »", "choices": ["Les Bronzés", "La Folie des grandeurs", "Le Pacha", "Les Trois Frères"], "answer": "Les Bronzés", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Mais Monsieur, pas avec votre poncho ! »", "choices": ["Les Visiteurs", "Le Pacha", "Les Trois Frères", "The Big Lebowski"], "answer": "Les Visiteurs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Oublie que t’as aucune chance, vas-y, fonce. »", "choices": ["Les Bronzés font du ski", "Les Trois Frères", "The Big Lebowski", "Elephant Man"], "answer": "Les Bronzés font du ski", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« C’est plutôt une boisson d’hommes. »", "choices": ["Les Tontons flingueurs", "SOS Fantômes", "Dikkenek", "La Folie des grandeurs"], "answer": "Les Tontons flingueurs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Touche pas au grisbi, salope. »", "choices": ["Les Tontons flingueurs", "Astérix et Obélix : Mission Cléopâtre", "Faites sauter la banque", "La Boum"], "answer": "Les Tontons flingueurs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Comment est votre blanquette ? »", "choices": ["OSS 117", "Hibernatus", "La Folie des grandeurs", "Le Flic de Beverly Hills"], "answer": "OSS 117", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« On est en 1955, les gars, il faut se réveiller. »", "choices": ["OSS 117", "La Grande Vadrouille", "Le Père Noël est une ordure", "Les Trois Frères"], "answer": "OSS 117", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Pas de bras, pas de chocolat. »", "choices": ["Intouchables", "Les Aventures de Rabbi Jacob", "L’Arme fatale", "The Mask"], "answer": "Intouchables", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Simon, vous êtes juif ? »", "choices": ["Les Aventures de Rabbi Jacob", "Les Visiteurs", "The Mask", "Faites sauter la banque"], "answer": "Les Aventures de Rabbi Jacob", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Moi, je crois pas qu’il y ait de bonnes ou de mauvaises situations. »", "choices": ["Astérix et Obélix : Mission Cléopâtre", "Taxi", "Faites sauter la banque", "La Septième Compagnie"], "answer": "Astérix et Obélix : Mission Cléopâtre", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« La vie, c’est comme une boîte de chocolats. »", "choices": ["Forrest Gump", "Brice de Nice", "Hibernatus", "La Cité de la peur"], "answer": "Forrest Gump", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Splendide ! »", "choices": ["The Mask", "Indiana Jones", "La Grande Vadrouille", "Le Pacha"], "answer": "The Mask", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Je suis trop vieux pour ces conneries. »", "choices": ["L’Arme fatale", "La Septième Compagnie", "Les Aventures de Rabbi Jacob", "Les Visiteurs"], "answer": "L’Arme fatale", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« On se serait shootés à la vitamine C si ça avait été illégal. »", "choices": ["Trainspotting", "Les Aventures de Rabbi Jacob", "L’Arme fatale", "The Mask"], "answer": "Trainspotting", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Je sais. Piloter, oui. Atterrir, non ! »", "choices": ["Indiana Jones", "L’Arme fatale", "Trainspotting", "Forrest Gump"], "answer": "Indiana Jones", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Il nous faudrait un plus gros bateau. »", "choices": ["Les Dents de la mer", "The Big Lebowski", "Faites sauter la banque", "La Septième Compagnie"], "answer": "Les Dents de la mer", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Tu sais, quand on cause pognon, à partir de certains chiffres, tout le monde écoute ! »", "choices": ["Le Pacha", "Camping", "Hibernatus", "La Cité de la peur"], "answer": "Le Pacha", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Alors, on n’attend pas Patrick ? »", "choices": ["Camping", "La Boum", "Las Vegas Parano", "Les Aventures de Rabbi Jacob"], "answer": "Camping", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« T’as déjà vu un monsieur tout nu ? »", "choices": ["Y a-t-il un pilote dans l’avion ?", "Las Vegas Parano", "Les Bronzés", "L’Arme fatale"], "answer": "Y a-t-il un pilote dans l’avion ?", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Whisky ? Oh, juste un doigt. Vous ne voulez pas un whisky d’abord ? »", "choices": ["La Cité de la peur", "Les Bronzés font du ski", "Men in Black", "Y a-t-il un pilote dans l’avion ?"], "answer": "La Cité de la peur", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Tu as mordu la ligne. »", "choices": ["The Big Lebowski", "L’Arme fatale", "Y a-t-il un pilote dans l’avion ?", "Hibernatus"], "answer": "The Big Lebowski", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Mais c’est de la merde ! »", "choices": ["Le Père Noël est une ordure", "The Mask", "Forrest Gump", "Las Vegas Parano"], "answer": "Le Père Noël est une ordure", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« La différence entre toi et moi, c’est que moi, j’ai la classe. »", "choices": ["Men in Black", "Dikkenek", "Indiana Jones", "La Folie des grandeurs"], "answer": "Men in Black", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Tu n’es pas seulement un lâche, tu es un traître, comme ta petite taille le laissait deviner. »", "choices": ["OSS 117", "La Boum", "Las Vegas Parano", "Les Aventures de Rabbi Jacob"], "answer": "OSS 117", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« C’est bien la première fois qu’il fait des étincelles avec sa bite. »", "choices": ["Les Morfalous", "Le Corniaud", "Les Bronzés font du ski", "Men in Black"], "answer": "Les Morfalous", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« On l’a vu, et il l’a eu dans le cul. »", "choices": ["SOS Fantômes", "Les Bronzés font du ski", "Men in Black", "99 francs"], "answer": "SOS Fantômes", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Insulte-moi en allemand, vas-y. »", "choices": ["99 francs", "Men in Black", "Astérix et Obélix : Mission Cléopâtre", "Intouchables"], "answer": "99 francs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Elle est gentille, mais elle est moche. Alors que toi, t’es moche et t’es con. »", "choices": ["Les Trois Frères", "Trainspotting", "Hibernatus", "Le Corniaud"], "answer": "Les Trois Frères", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Je ne suis pas un animal, je suis un être humain. Je suis un homme. »", "choices": ["Elephant Man", "Faites sauter la banque", "La Boum", "La Septième Compagnie"], "answer": "Elephant Man", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« T’en as trop pris, mon vieux. »", "choices": ["Las Vegas Parano", "La Chèvre", "Le Dîner de cons", "Les Bronzés font du ski"], "answer": "Las Vegas Parano", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Si je te dis que t’es tendu, t’es tendu. »", "choices": ["Dikkenek", "Le Flic de Beverly Hills", "Les Morfalous", "OSS 117"], "answer": "Dikkenek", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Philippe ! »", "choices": ["Le Flic de Beverly Hills", "Les Morfalous", "Rien à déclarer", "Astérix et Obélix : Mission Cléopâtre"], "answer": "Le Flic de Beverly Hills", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Ça te dirait de… ne pas venir ? »", "choices": ["Brice de Nice", "OSS 117", "Astérix et Obélix : Mission Cléopâtre", "La Boum"], "answer": "Brice de Nice", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Qu’est-ce que vous dites ? »", "choices": ["Hibernatus", "Y a-t-il un pilote dans l’avion ?", "Intouchables", "Le Flic de Beverly Hills"], "answer": "Hibernatus", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Elle s’appelle Edmée… »", "choices": ["Hibernatus", "Faites sauter la banque", "La Chèvre", "Las Vegas Parano"], "answer": "Hibernatus", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Il s’appelle juste Leblanc. »", "choices": ["Le Dîner de cons", "La Cité de la peur", "Le Flic de Beverly Hills", "Les Dents de la mer"], "answer": "Le Dîner de cons", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Aucun risque avec les Tangana ! »", "choices": ["Faites sauter la banque", "Le Pacha", "Les Tontons flingueurs", "Rien à déclarer"], "answer": "Faites sauter la banque", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Alerte générale ! »", "choices": ["Taxi", "Les Morfalous", "Rien à déclarer", "Brice de Nice"], "answer": "Taxi", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Le fil rouge sur le bouton rouge, le fil vert sur le bouton vert. »", "choices": ["La Septième Compagnie", "Rien à déclarer", "Brice de Nice", "La Boum"], "answer": "La Septième Compagnie", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Il en manque une. »", "choices": ["La Folie des grandeurs", "99 francs", "Intouchables", "Le Pacha"], "answer": "La Folie des grandeurs", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Vous avez dodeliné avec votre grosse tête. »", "choices": ["Hibernatus", "Forrest Gump", "La Cité de la peur", "Le Corniaud"], "answer": "Hibernatus", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Y a un U dans ambulance ? »", "choices": ["Rien à déclarer", "La Folie des grandeurs", "Le Flic de Beverly Hills", "Les Dents de la mer"], "answer": "Rien à déclarer", "time": 15}, {"section": "🎬 Cinéma culte", "type": "text", "instruction": "Trouver de quel film cette phrase est issue :", "question": "« Parfaitement bilingue, hein ? »", "choices": ["L’Aventure, c’est l’aventure", "Le Pacha", "Les Tontons flingueurs", "SOS Fantômes"], "answer": "L’Aventure, c’est l’aventure", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui porte un chapeau acheté à Tulum ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui est agent de voyage ?", "choices": ["Agathe", "Julien"], "answer": "Agathe", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui aime les cactus ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui appelle tout le monde “mon loulou” ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui est malade en bateau ?", "choices": ["Agathe", "Julien"], "answer": "Agathe", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui adore taper sur des seaux à champagne ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui veut faire de la plongée sous-marine ?", "choices": ["Agathe", "Julien"], "answer": "Agathe", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui dit : « Il faut absolument qu’on goûte ça » ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui a un couteau tatoué sur le bras ?", "choices": ["Agathe", "Julien"], "answer": "Julien", "time": 15}, {"section": "❤️ Julien ou Agathe ?", "type": "text", "instruction": "", "question": "Qui a été tué par le homard ?", "choices": ["Agathe", "Julien"], "answer": "Agathe", "time": 15}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Où a été prise cette photo ?", "choices": ["Cebu aux Philippines", "Tulum au Mexique", "Marrakech au Maroc", "Bali en Indonésie"], "answer": "Tulum au Mexique", "time": 15, "image": "assets/tulum_restaurant.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Où cette photo a-t-elle été prise ?", "choices": ["Saint-Tropez", "Calvi", "Marrakech", "Ibiza"], "answer": "Marrakech", "time": 15, "image": "assets/marrakech_pool.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Dans ce restaurant, nous avons mangé le meilleur…", "choices": ["Carpaccio de bœuf", "Canard laqué", "Crocodile", "Tajine d’agneau"], "answer": "Canard laqué", "time": 15, "image": "assets/canard_laque.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Cette photo a été prise à…", "choices": ["Nyon", "Lausanne", "Los Angeles", "Montreux"], "answer": "Nyon", "time": 15, "image": "assets/nyon.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "La fille qui porte le panneau est…", "choices": ["Monica Bellucci", "La reine d’Angleterre", "Une Croate qui n’a rien demandé à personne", "Dua Lipa incognito"], "answer": "Une Croate qui n’a rien demandé à personne", "time": 15, "image": "assets/croate.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Cette photo a été prise…", "choices": ["Aux Philippines", "À Tulum", "Sur le Lac Léman", "En Croatie"], "answer": "Aux Philippines", "time": 15, "image": "assets/philippines.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "Où cette photo a-t-elle été prise ?", "choices": ["Marrakech", "Tulum", "Croatie", "Saint-Tropez"], "answer": "Marrakech", "time": 15, "image": "assets/marrakech_nuit.jpg"}, {"section": "📸 Photos", "type": "image", "instruction": "", "question": "C’est…", "choices": ["Un arbre à came", "Un arbre à couilles", "Un dessert", "Un bijou de famille"], "answer": "Un dessert", "time": 15, "image": "assets/dessert.jpg"}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["One More Time — Daft Punk", "Music Sounds Better With You — Stardust", "Lady — Modjo", "Starlight — The Supermen Lovers"], "answer": "Music Sounds Better With You — Stardust", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Lady — Modjo", "World Hold On — Bob Sinclar", "D.A.N.C.E. — Justice", "Freed From Desire — Gala"], "answer": "Lady — Modjo", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Love Generation — Bob Sinclar", "World Hold On — Bob Sinclar", "One More Time — Daft Punk", "Calabria 2007 — Enur"], "answer": "World Hold On — Bob Sinclar", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Get Lucky — Daft Punk", "Around The World — Daft Punk", "One More Time — Daft Punk", "Da Funk — Daft Punk"], "answer": "One More Time — Daft Punk", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Freed From Desire — Gala", "Calabria 2007 — Enur", "Pedro", "D.A.N.C.E. — Justice"], "answer": "Freed From Desire — Gala", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Safe and Sound — Justice", "D.A.N.C.E. — Justice", "Genesis — Justice", "Starlight — The Supermen Lovers"], "answer": "D.A.N.C.E. — Justice", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Starlight — The Supermen Lovers", "Lady — Modjo", "Music Sounds Better With You — Stardust", "Sing It Back — Moloko"], "answer": "Starlight — The Supermen Lovers", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Cola — CamelPhat", "Losing It — Fisher", "Turn Off The Lights — Fisher", "Piece Of Your Heart — Meduza"], "answer": "Losing It — Fisher", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Wake Me Up — Avicii", "The Nights — Avicii", "Levels — Avicii", "Summer — Calvin Harris"], "answer": "Levels — Avicii", "time": 20}, {"section": "🎧 Blind test", "type": "music", "instruction": "", "question": "🎧 Blind test : quel est ce morceau ?", "choices": ["Pedro", "On The Floor — Jennifer Lopez", "Freed From Desire — Gala", "Calabria 2007 — Enur"], "answer": "Calabria 2007 — Enur", "time": 20}];
+const ADMIN_CODE = "LOULOU2026";
+const GAME = "LOULOU";
+const app = initializeApp(firebaseConfig);
+
+
+let db;
+let currentTeamId = localStorage.getItem("loulousTeamId") || "";
+let currentTeam = JSON.parse(localStorage.getItem("loulousTeam") || "null");
+let selectedAnswer = null;
+let currentQuestionIndex = -1;
+let currentQuestion = null;
+let timerId = null;
+let alreadyScoredQuestion = new Set();
+let playerStateUnsubscribe = null;
+let isAdminMode = false;
+
+window.show = id => {
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+};
+
+async function boot(){
+  try{
+    db = getDatabase(app);
+    document.getElementById("connectionStatus").textContent = "✅ Jeu connecté";
+    await ensureGame();
+    subscribeCounts();
+    if(localStorage.getItem("loulousRole") === "player" && currentTeamId && currentTeam){
+      teamLabel.textContent = currentTeam.name + " · " + currentTeam.group;
+      subscribePlayer();
+    }
+  }catch(e){
+    document.getElementById("connectionStatus").textContent = "❌ Connexion impossible : " + e.message;
+  }
+}
+
+async function ensureGame(){
+  const gameRef = ref(db, "games/"+GAME+"/state");
+  const snap = await get(gameRef);
+  if(!snap.exists()){
+    await set(gameRef, {status:"lobby",questionIndex:-1,reveal:false,updatedAt:Date.now()});
+  }
+}
+
+function subscribeCounts(){
+  onValue(ref(db,"games/"+GAME+"/teams"), snap => {
+    const teams = snap.val() || {};
+    const count = Object.keys(teams).length;
+    teamCount.textContent = count;
+    adminTeams.textContent = count;
+  });
+}
+
+window.joinGame = async function(){
+  const errorBox = document.getElementById("joinError");
+  const button = document.getElementById("joinButton");
+  const nameInput = document.getElementById("teamName");
+  const groupInput = document.getElementById("teamGroup");
+  const codeInput = document.getElementById("gameCode");
+  errorBox.classList.remove("hidden");
+  errorBox.textContent = "Inscription en cours…";
+  button.disabled = true;
+  try {
+    if(!db) throw new Error("Le jeu n’est pas encore connecté.");
+    const name = nameInput.value.trim();
+    const group = groupInput.value;
+    const code = codeInput.value.trim().toUpperCase();
+    if(!name) throw new Error("Donnez un nom à votre équipe.");
+    if(code !== GAME) throw new Error("Le code de la partie est incorrect.");
+    const teamRef = push(ref(db,"games/"+GAME+"/teams"));
+    currentTeamId = teamRef.key;
+    currentTeam = {name,group,score:0,joinedAt:Date.now()};
+    await set(teamRef,currentTeam);
+    localStorage.setItem("loulousTeamId",currentTeamId);
+    localStorage.setItem("loulousTeam",JSON.stringify(currentTeam));
+    localStorage.setItem("loulousRole","player");
+    isAdminMode = false;
+    document.getElementById("teamLabel").textContent = name+" · "+group;
+    errorBox.classList.add("hidden");
+    show("lobby");
+    subscribePlayer();
+  } catch(e) {
+    console.error("Erreur inscription", e);
+    errorBox.textContent = "❌ " + (e && e.message ? e.message : "Inscription impossible");
+  } finally {
+    button.disabled = false;
+  }
+};
+document.getElementById("joinButton").addEventListener("click", window.joinGame);
+
+function subscribePlayer(){
+  if(playerStateUnsubscribe) playerStateUnsubscribe();
+  playerStateUnsubscribe = onValue(ref(db,"games/"+GAME+"/state"), snap => {
+    if(isAdminMode) return;
+    const state=snap.val()||{};
+    if(state.status==="ranking"){ loadRanking(false); return; }
+    if(state.questionIndex>=0 && state.questionIndex!==currentQuestionIndex && !state.reveal){
+      currentQuestionIndex=state.questionIndex;
+      loadQuestion(currentQuestionIndex);
+    }
+    if(state.reveal && currentQuestion) revealPlayer();
+  });
+}
+
+function loadQuestion(index){
+  currentQuestion = questions[index % questions.length];
+  selectedAnswer = null;
+  questionSection.textContent = currentQuestion.section;
+  questionNumber.textContent = (index+1)+" / "+questions.length;
+  questionInstruction.textContent = currentQuestion.instruction || "";
+  questionText.textContent = currentQuestion.question;
+  questionMedia.innerHTML = "";
+  if(currentQuestion.type==="image" && currentQuestion.image){
+    const img=document.createElement("img");img.src=currentQuestion.image;img.className="photo";questionMedia.appendChild(img);
+  }
+  if(currentQuestion.type==="music"){
+    questionMedia.innerHTML='<div class="musicbox">🎧<div class="small">Lancez l’extrait sur la sono</div></div>';
+  }
+  answers.innerHTML="";
+  currentQuestion.choices.forEach(choice=>{
+    const b=document.createElement("button");
+    b.className="answer";b.textContent=choice;
+    b.onclick=()=>{document.querySelectorAll(".answer").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selectedAnswer=choice;};
+    answers.appendChild(b);
+  });
+  sendAnswerBtn.disabled=false;
+  show("question"); startTimer(currentQuestion.time||15);
+}
+
+function startTimer(seconds){
+  clearInterval(timerId); let t=seconds; timer.textContent=t;
+  timerId=setInterval(()=>{t--;timer.textContent=t;if(t<=0){clearInterval(timerId);sendAnswer();}},1000);
+}
+
+window.sendAnswer = async function(){
+  clearInterval(timerId);
+  if(!currentTeamId || !currentQuestion) return;
+  sendAnswerBtn.disabled=true;
+  await set(ref(db,`games/${GAME}/answers/${currentQuestionIndex}/${currentTeamId}`),{
+    answer:selectedAnswer||"",submittedAt:Date.now()
+  });
+  show("waitingAnswer");
+};
+
+async function revealPlayer(){
+  if(!currentQuestion) return;
+  const answerSnap=await get(ref(db,`games/${GAME}/answers/${currentQuestionIndex}/${currentTeamId}`));
+  const given=answerSnap.val()?.answer||"";
+  const ok=given===currentQuestion.answer;
+  correctionTitle.textContent=ok?"Bonne réponse":"Mauvaise réponse";
+  correctAnswer.textContent=currentQuestion.answer;
+  pointsEarned.textContent=ok?"+1":"+0";
+  if(ok && !alreadyScoredQuestion.has(currentQuestionIndex)){
+    alreadyScoredQuestion.add(currentQuestionIndex);
+    const teamRef=ref(db,`games/${GAME}/teams/${currentTeamId}`);
+    const teamSnap=await get(teamRef);
+    const score=(teamSnap.val()?.score||0)+1;
+    await update(teamRef,{score});
+  }
+  currentQuestion=null;
+  show("correction");
+}
+
+window.openAdmin = async function(){
+  if(adminCode.value!==ADMIN_CODE) return alert("Code incorrect.");
+  isAdminMode = true;
+  localStorage.setItem("loulousRole","admin");
+  if(playerStateUnsubscribe){
+    playerStateUnsubscribe();
+    playerStateUnsubscribe = null;
+  }
+  clearInterval(timerId);
+  currentQuestion = null;
+  show("admin");
+  publicUrl.textContent=location.href.split("#")[0];
+  qrCode.src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(location.href.split("#")[0]);
+  subscribeAdmin();
+};
+
+function subscribeAdmin(){
+  onValue(ref(db,"games/"+GAME+"/state"), snap=>{
+    const state=snap.val()||{};
+    currentQuestionIndex=state.questionIndex??-1;
+    if(currentQuestionIndex>=0){
+      const q=questions[currentQuestionIndex%questions.length];
+      adminQuestionTitle.textContent=q.question;
+      adminQuestionMeta.textContent=q.section+" · "+(q.time||15)+" secondes";
+      subscribeAnswerCount(currentQuestionIndex);
+    }
+  });
+}
+
+let answerCountUnsub = null;
+function subscribeAnswerCount(index){
+  if(answerCountUnsub) answerCountUnsub();
+  answerCountUnsub=onValue(ref(db,`games/${GAME}/answers/${index}`),snap=>{
+    adminAnswers.textContent=Object.keys(snap.val()||{}).length;
+  });
+}
+
+window.adminNext = async function(){
+  const stateRef=ref(db,"games/"+GAME+"/state");
+  const snap=await get(stateRef);
+  let next=(snap.val()?.questionIndex??-1)+1;
+  if(next>=questions.length) next=0;
+  await set(stateRef,{status:"playing",questionIndex:next,reveal:false,updatedAt:Date.now()});
+};
+
+window.adminReveal = async function(){
+  await update(ref(db,"games/"+GAME+"/state"),{reveal:true,updatedAt:Date.now()});
+};
+
+window.adminShowRanking = async function(){
+  await update(ref(db,"games/"+GAME+"/state"),{status:"ranking",updatedAt:Date.now()});
+  loadRanking(true);
+};
+
+window.adminReset = async function(){
+  if(!confirm("Réinitialiser les scores et la partie ?")) return;
+  await remove(ref(db,"games/"+GAME+"/answers"));
+  const teamsSnap=await get(ref(db,"games/"+GAME+"/teams"));
+  const teams=teamsSnap.val()||{};
+  const updates={};
+  Object.keys(teams).forEach(id=>updates[id+"/score"]=0);
+  await update(ref(db,"games/"+GAME+"/teams"),updates);
+  await set(ref(db,"games/"+GAME+"/state"),{status:"lobby",questionIndex:-1,reveal:false,updatedAt:Date.now()});
+  adminQuestionTitle.textContent="Prêt à démarrer";
+  adminQuestionMeta.textContent="";
+  adminAnswers.textContent="0";
+};
+
+async function loadRanking(adminMode){
+  onValue(ref(db,"games/"+GAME+"/teams"), snap=>{
+    const teams=Object.values(snap.val()||{}).sort((a,b)=>(b.score||0)-(a.score||0));
+    rankingRows.innerHTML="";
+    const agathe=[],julien=[];
+    teams.forEach((t,i)=>{
+      const row=document.createElement("div");row.className="row";
+      row.innerHTML=`<div>${["🥇","🥈","🥉"][i]||i+1}</div><div><b>${escapeHtml(t.name)}</b><small>${escapeHtml(t.group)}</small></div><b>${t.score||0} pts</b>`;
+      rankingRows.appendChild(row);
+      if(t.group.includes("Agathe")) agathe.push(t.score||0);
+      if(t.group.includes("Julien")) julien.push(t.score||0);
+    });
+    const avg=a=>a.length?(a.reduce((x,y)=>x+y,0)/a.length).toFixed(2):"0.00";
+    familyScore.textContent=`Score moyen au prorata — Agathe : ${avg(agathe)} · Julien : ${avg(julien)}`;
+    show("ranking");
+  },{onlyOnce:true});
+}
+
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+boot();
+</script>
+</body>
+</html>
