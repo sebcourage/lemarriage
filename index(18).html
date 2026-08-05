@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ef6f68">
+<title>Les Loulous se marient !</title>
+<style>
+:root{--coral:#ef6f68;--sun:#f5b64f;--cream:#fff5df;--turq:#4fb6b5;--deep:#173e59;--paper:#f9edd7;--ok:#4f8b65;--bad:#b85c5c}
+*{box-sizing:border-box}body{margin:0;background:#e9dfcf;color:var(--deep);font-family:Arial,Helvetica,sans-serif}
+main{max-width:470px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 40px #0002}
+section{display:none;min-height:100vh;padding:22px;flex-direction:column}section.active{display:flex}
+.poster{margin:-22px -22px 10px;min-height:325px;position:relative;overflow:hidden;
+background:
+linear-gradient(180deg,rgba(120,28,79,.20) 0%,rgba(239,111,104,.18) 34%,rgba(245,182,79,.30) 68%,rgba(23,62,89,.22) 100%),
+url("https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Formentera%27s_beach.JPG/1280px-Formentera%27s_beach.JPG") center/cover no-repeat}
+
+.title{position:absolute;left:0;right:0;top:22px;text-align:center;color:var(--cream);font:900 46px/.86 Georgia,serif;text-shadow:0 3px 16px #0009}
+.title small{display:block;font:28px cursive;color:#ffd26a;margin-top:12px}
+.ribbon{position:absolute;left:22px;right:22px;bottom:18px;background:rgba(16,45,67,.88);color:var(--cream);padding:12px;text-align:center;font-weight:900}.photo-credit{position:absolute;right:8px;bottom:2px;color:#fff;font-size:8px;text-shadow:0 1px 3px #000}
+h1,h2{font-family:Georgia,serif;text-transform:uppercase}h1{font-size:32px}h2{font-size:25px;line-height:1.2}
+.btn{display:block;width:100%;padding:15px;border:3px solid var(--deep);box-shadow:5px 5px 0 var(--deep);font-weight:900;text-transform:uppercase;text-align:center;cursor:pointer}
+.primary{background:var(--coral);color:var(--cream)}.secondary{background:var(--cream);color:var(--deep)}.danger{background:#b85c5c;color:white}
+.actions{display:grid;gap:12px;margin-top:16px}.field{display:grid;gap:7px;margin:14px 0}.field input,.field select{padding:14px;border:3px solid var(--deep);background:var(--cream);font-size:16px}
+.card{background:var(--cream);border:3px solid var(--deep);padding:18px;box-shadow:6px 6px 0 var(--turq)}
+.answer{display:block;width:100%;padding:13px;border:3px solid var(--deep);background:var(--cream);font-weight:900;text-align:left;margin:9px 0}
+.answer.selected{outline:5px solid var(--sun)}.answer.correct{background:#cde7c9!important;border-color:#2f7b45!important}.answer.wrong{background:#f3b7b0!important;border-color:#a33d3d!important;color:#521b1b}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{padding:7px 10px;background:var(--sun);border:2px solid var(--deep);font-size:11px;font-weight:900}
+.timer{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:16px auto;background:var(--sun);border:5px solid var(--deep);font-size:24px;font-weight:900}
+.notice{padding:14px;background:#d9eee8;border:3px solid var(--deep);box-shadow:4px 4px 0 var(--sun);font-weight:800;margin:14px 0}
+.row{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--deep);padding:13px;margin:10px 0}
+.row small{display:block;color:#59656b;margin-top:3px}.small{font-size:13px;color:#56646b}.hidden{display:none!important}.center{text-align:center}
+.adminbar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.stat{background:var(--cream);border:3px solid var(--deep);padding:12px}.stat strong{display:block;font-size:24px}
+.photo{width:100%;max-height:360px;object-fit:contain;border:3px solid var(--deep);background:#111;margin-bottom:12px}
+.musicbox{padding:24px;border:3px dashed var(--deep);text-align:center;background:#fff5df;margin-bottom:12px;font-size:45px}
+.qr{width:210px;height:210px;border:8px solid white;outline:3px solid var(--deep);margin:12px auto}
+.status{font-size:13px;font-weight:800;color:#59656b}#questionInstruction{font-size:clamp(24px,6vw,32px);line-height:1.35;font-weight:850}
+#questionText{font-size:clamp(38px,9vw,52px);line-height:1.15;margin:14px 0 24px;letter-spacing:.01em}
+.answer{font-size:clamp(30px,7vw,40px);line-height:1.22;padding:22px 18px;min-height:88px;margin:13px 0;border-width:4px}.speed-board{margin-top:18px;text-align:left}.speed-board h3{font-size:20px}.warning-count{font-size:72px;font-weight:950;color:var(--coral);margin:20px 0}.reset-small{width:auto!important;padding:7px 9px!important;border-width:2px!important;box-shadow:2px 2px 0 var(--deep)!important;font-size:9px;margin:18px 0 0 auto}.admin-correction{font-weight:900;margin-top:8px}#correctionTitle{font-size:40px}#correctAnswer{font-size:clamp(40px,10vw,58px);line-height:1.15}#correctionTitle{font-size:38px}#correctAnswer{font-size:clamp(38px,9vw,54px);line-height:1.15}.game-ended{margin:auto;text-align:center}
+@media(max-width:390px){
+  #questionText{font-size:36px}
+  .answer{font-size:28px;min-height:82px}
+}
+.celebration-layer{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti-piece{position:absolute;top:-10vh;width:12px;height:20px;border-radius:2px;animation:confettiFall 2s ease-in forwards}
+@keyframes confettiFall{
+  0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:1}
+  100%{transform:translate3d(var(--drift),110vh,0) rotate(900deg);opacity:0}
+}
+</style>
+</head>
+<body>
+<div id="celebrationLayer" class="celebration-layer"></div>
+<main>
+<section id="home" class="active">
+<div class="poster"><div class="title">LES<br>LOULOUS<small>se marient !</small></div><div class="ribbon">Le quiz officiel · Riviera Édition</div><div class="photo-credit">Photo réelle de Formentera · domaine public</div></div>
+<p class="center"><b>Cinéma · souvenirs · photos · blind test</b></p>
+<div id="connectionStatus" class="notice">Connexion à la partie…</div>
+<div class="actions"><button class="btn primary" onclick="show('join')">Rejoindre la partie</button><button class="btn secondary" onclick="show('adminLogin')">Espace administrateur</button></div>
+</section>
+
+<section id="join">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Invité</span></div>
+<h1>Rejoindre</h1>
+<label class="field"><b>Nom d’équipe</b><input id="teamName" placeholder="Les Cactus" maxlength="30"></label>
+<label class="field"><b>Groupe</b><select id="teamGroup"><option>Famille d’Agathe</option><option>Famille de Julien</option><option>Amis des Loulous</option></select></label>
+<label class="field"><b>Code de la partie</b><input id="gameCode" value="LOULOU" maxlength="10"></label>
+<div id="joinError" class="notice hidden"></div>
+<div class="actions"><button class="btn primary" id="joinButton" type="button">Rejoindre</button></div>
+</section>
+
+<section id="lobby">
+<div class="top"><span class="pill">Équipe connectée</span><b>●</b></div>
+<div style="margin:auto;text-align:center"><h1>Bienvenue à bord</h1><p id="teamLabel"></p><div class="notice" id="lobbyMessage">En attente du maître du jeu…</div><p><b id="teamCount">0</b> équipes connectées</p></div>
+</section>
+
+<section id="speedWarning">
+<div style="margin:auto;text-align:center">
+<span class="pill">Question de rapidité</span>
+<h1 id="warningTitle">Préparez-vous !</h1>
+<div id="warningCount" class="warning-count">5</div>
+<div class="notice" id="warningText">Seuls les trois premiers marqueront un point.</div>
+</div>
+</section>
+
+<section id="question">
+<div class="top"><span class="pill" id="questionSection"></span><b id="questionNumber"></b></div>
+<div class="timer" id="timer">15</div>
+<div id="questionMedia"></div>
+<div class="card"><p id="questionInstruction"></p><h2 id="questionText"></h2><div id="answers"></div><div id="playerAnswerStatus" class="notice hidden">Réponse enregistrée. La correction apparaîtra automatiquement à la fin du décompte.</div></div>
+
+</section>
+
+<section id="waitingAnswer">
+<div style="margin:auto;text-align:center"><h1>Réponse envoyée</h1><div class="notice">La correction apparaîtra automatiquement à la fin du décompte.</div></div>
+</section>
+
+<section id="correction">
+<div class="top"><span class="pill">Correction</span><b id="pointsEarned">+0</b></div>
+<div class="card center" style="margin-top:28px"><h1 id="correctionTitle"></h1><h2 id="correctAnswer"></h2><div id="correctionChoices"></div><div id="questionWinners" class="speed-board"></div></div>
+<div class="actions"><button class="btn secondary" onclick="show('lobby')">Attendre la suite</button></div>
+</section>
+
+<section id="adminLogin">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Admin</span></div>
+<h1>Maître du jeu</h1>
+<label class="field"><b>Code secret</b><input id="adminCode" type="password" placeholder="••••••"></label>
+<div class="actions"><button class="btn primary" onclick="openAdmin()">Entrer</button></div>
+</section>
+
+<section id="admin">
+<div class="top"><button onclick="show('home')">←</button><span class="pill">Poste de pilotage</span></div>
+<div class="top"><h1>Partie LOULOU</h1><button class="btn danger reset-small" onclick="adminReset()">Réinitialiser</button></div>
+<img id="qrCode" class="qr" alt="QR code">
+<p class="center small" id="publicUrl"></p>
+<div class="adminbar"><div class="stat"><strong id="adminTeams">0</strong><span>équipes</span></div><div class="stat"><strong id="adminAnswers">0</strong><span>réponses</span></div></div>
+<div id="adminTimer" class="timer">--</div>
+<div class="card"><h2 id="adminQuestionTitle">Prêt à démarrer</h2><p id="adminQuestionMeta" class="small"></p><div id="adminChoices" class="speed-board"></div><div id="adminCorrection" class="admin-correction"></div><div id="adminStats" class="speed-board"></div><div id="adminWinners" class="speed-board"></div></div>
+<div class="actions">
+<button class="btn primary" id="adminNextButton" onclick="adminNext()">Lancer / question suivante</button>
+<button class="btn secondary" onclick="adminShowRanking()">Afficher le classement</button>
+</div>
+</section>
+
+<section id="ranking">
+<div class="top"><button onclick="show('admin')">←</button><span class="pill">Classement</span></div>
+<h1>Le podium</h1><div id="rankingRows"></div>
+</section>
+<section id="ended">
+<div class="game-ended"><h1>Partie terminée</h1><div class="notice">Merci d’avoir joué avec les Loulous !</div><button class="btn secondary" id="finalRankingButton">Voir le classement</button><div id="finalRankingRows" class="hidden" style="margin-top:20px"></div></div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, push, onValue, remove, runTransaction } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+const firebaseConfig = {"apiKey": "AIzaSyB2-51sID5e7ChRDeZLmn_E9KgmqxzZsf4", "authDomain": "marriage-julien-et-agathe.firebaseapp.com", "projectId": "marriage-julien-et-agathe", "storageBucket": "marriage-julien-et-agathe.firebasestorage.app", "messagingSenderId": "7246207660", "appId": "1:7246207660:web:bbf10f25fcf592709b1d09", "databaseURL": "https://marriage-julien-et-agathe-default-rtdb.europe-west1.firebasedatabase.app"};
+const questions = [{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Prenez un chewing-gum, Émile. »","choices":["La Cité de la peur","99 francs","Elephant Man","Intouchables"],"answer":"La Cité de la peur","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Les cons, ça ose tout. C’est même à ça qu’on les reconnaît. »","choices":["Les Tontons flingueurs","Forrest Gump","La Cité de la peur","Le Dîner de cons"],"answer":"Les Tontons flingueurs","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Ce soir, je sens que je vais conclure. »","choices":["Les Bronzés","La Folie des grandeurs","Le Pacha","Les Trois Frères"],"answer":"Les Bronzés","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Mais Monsieur, pas avec votre poncho ! »","choices":["Les Visiteurs","Le Pacha","Les Trois Frères","The Big Lebowski"],"answer":"Les Visiteurs","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Oublie que t’as aucune chance, vas-y, fonce. »","choices":["Les Bronzés font du ski","Les Trois Frères","The Big Lebowski","Elephant Man"],"answer":"Les Bronzés font du ski","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« C’est plutôt une boisson d’hommes. »","choices":["Les Tontons flingueurs","SOS Fantômes","Dikkenek","La Folie des grandeurs"],"answer":"Les Tontons flingueurs","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Touche pas au grisbi, salope. »","choices":["Les Tontons flingueurs","Joséphine Ange-gardien","Faites sauter la banque","La Boum"],"answer":"Les Tontons flingueurs","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Comment est votre blanquette ? »","choices":["OSS 117","Hibernatus","La Folie des grandeurs","Le Flic de Beverly Hills"],"answer":"OSS 117","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« On est en 1955, les gars, il faut se réveiller. »","choices":["OSS 117","La Grande Vadrouille","Le Père Noël est une ordure","Les Trois Frères"],"answer":"OSS 117","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Pas de bras, pas de chocolat. »","choices":["Intouchables","Les Aventures de Rabbi Jacob","L’Arme fatale","The Mask"],"answer":"Intouchables","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Simon, vous êtes juif ? »","choices":["Les Aventures de Rabbi Jacob","Les Visiteurs","The Mask","Faites sauter la banque"],"answer":"Les Aventures de Rabbi Jacob","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Moi, je crois pas qu’il y ait de bonnes ou de mauvaises situations. »","choices":["Astérix et Obélix : Mission Cléopâtre","Taxi","Faites sauter la banque","La Septième Compagnie"],"answer":"Astérix et Obélix : Mission Cléopâtre","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« La vie, c’est comme une boîte de chocolats. »","choices":["Forrest Gump","Brice de Nice","Hibernatus","La Cité de la peur"],"answer":"Forrest Gump","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Splendide ! »","choices":["The Mask","Une nuit avec Rocco Siffredi","La Grande Vadrouille","Le Pacha"],"answer":"The Mask","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Je suis trop vieux pour ces conneries. »","choices":["L’Arme fatale","La Septième Compagnie","Les Aventures de Rabbi Jacob","Les Visiteurs"],"answer":"L’Arme fatale","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« On se serait shootés à la vitamine C si ça avait été illégal. »","choices":["Trainspotting","Les Aventures de Rabbi Jacob","L’Arme fatale","The Mask"],"answer":"Trainspotting","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Je sais. Piloter, oui. Atterrir, non ! »","choices":["Indiana Jones","L’Arme fatale","Trainspotting","Forrest Gump"],"answer":"Indiana Jones","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Il nous faudrait un plus gros bateau. »","choices":["Les Dents de la mer","The Big Lebowski","Faites sauter la banque","La Septième Compagnie"],"answer":"Les Dents de la mer","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Tu sais, quand on cause pognon, à partir de certains chiffres, tout le monde écoute ! »","choices":["Le Pacha","Camping","Hibernatus","La Cité de la peur"],"answer":"Le Pacha","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Alors, on n’attend pas Patrick ? »","choices":["Camping","La Boum","Las Vegas Parano","Les Aventures de Rabbi Jacob"],"answer":"Camping","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« T’as déjà vu un monsieur tout nu ? »","choices":["Y a-t-il un pilote dans l’avion ?","Las Vegas Parano","Les Bronzés","L’Arme fatale"],"answer":"Y a-t-il un pilote dans l’avion ?","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Whisky ? Oh, juste un doigt. Vous ne voulez pas un whisky d’abord ? »","choices":["La Cité de la peur","Les Bronzés font du ski","Men in Black","Y a-t-il un pilote dans l’avion ?"],"answer":"La Cité de la peur","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Tu as mordu la ligne. »","choices":["The Big Lebowski","L’Arme fatale","Y a-t-il un pilote dans l’avion ?","Hibernatus"],"answer":"The Big Lebowski","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Mais c’est de la merde ! »","choices":["Le Père Noël est une ordure","The Mask","Forrest Gump","Las Vegas Parano"],"answer":"Le Père Noël est une ordure","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« La différence entre toi et moi, c’est que moi, j’ai la classe. »","choices":["Men in Black","Dikkenek","Indiana Jones","La Folie des grandeurs"],"answer":"Men in Black","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Tu n’es pas seulement un lâche, tu es un traître, comme ta petite taille le laissait deviner. »","choices":["OSS 117","La Boum","Las Vegas Parano","Les Aventures de Rabbi Jacob"],"answer":"OSS 117","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« C’est bien la première fois qu’il fait des étincelles avec sa bite. »","choices":["Les Morfalous","Le Corniaud","Les Bronzés font du ski","Men in Black"],"answer":"Les Morfalous","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« On l’a vu, et il l’a eu dans le cul. »","choices":["SOS Fantômes","Les Bronzés font du ski","Men in Black","99 francs"],"answer":"SOS Fantômes","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Insulte-moi en allemand, vas-y. »","choices":["99 francs","Men in Black","Astérix et Obélix : Mission Cléopâtre","Intouchables"],"answer":"99 francs","time":15,"speedChallenge":true,"speedPoints":[1,1,1]},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Elle est gentille, mais elle est moche. Alors que toi, t’es moche et t’es con. »","choices":["Les Trois Frères","Trainspotting","Hibernatus","Le Corniaud"],"answer":"Les Trois Frères","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Je ne suis pas un animal, je suis un être humain. Je suis un homme. »","choices":["Elephant Man","Faites sauter la banque","La Boum","La Septième Compagnie"],"answer":"Elephant Man","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« T’en as trop pris, mon vieux. »","choices":["Las Vegas Parano","La Chèvre","Le Dîner de cons","Les Bronzés font du ski"],"answer":"Las Vegas Parano","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Si je te dis que t’es tendue, t’es tendue. »","choices":["Dikkenek","Le Flic de Beverly Hills","Les Morfalous","OSS 117"],"answer":"Dikkenek","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Philippe ! »","choices":["Le Flic de Beverly Hills","Les Morfalous","Rien à déclarer","Astérix et Obélix : Mission Cléopâtre"],"answer":"Le Flic de Beverly Hills","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Ça te dirait de… ne pas venir ? »","choices":["Brice de Nice","OSS 117","Astérix et Obélix : Mission Cléopâtre","La Boum"],"answer":"Brice de Nice","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Qu’est-ce que vous dites ? »","choices":["Hibernatus","Y a-t-il un pilote dans l’avion ?","Intouchables","Le Flic de Beverly Hills"],"answer":"Hibernatus","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Elle s’appelle Edmée… »","choices":["Hibernatus","Faites sauter la banque","La Chèvre","Las Vegas Parano"],"answer":"Hibernatus","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Il s’appelle Just Leblanc ! »","choices":["Le Dîner de cons","La Cité de la peur","Le Flic de Beverly Hills","Les Dents de la mer"],"answer":"Le Dîner de cons","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Aucun risque avec les Tangana ! »","choices":["Faites sauter la banque","Le Pacha","Les Tontons flingueurs","Rien à déclarer"],"answer":"Faites sauter la banque","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Alerte générale ! »","choices":["Taxi","Les Morfalous","Rien à déclarer","Brice de Nice"],"answer":"Taxi","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Le fil rouge sur le bouton rouge, le fil vert sur le bouton vert. »","choices":["La Septième Compagnie","Rien à déclarer","Brice de Nice","La Boum"],"answer":"La Septième Compagnie","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Il en manque une ! »","choices":["La Folie des grandeurs","99 francs","Intouchables","Le Pacha"],"answer":"La Folie des grandeurs","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Vous avez dodeliné avec votre grosse tête. »","choices":["Hibernatus","Forrest Gump","La Cité de la peur","Le Corniaud"],"answer":"Hibernatus","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Il y a un U dans amblance ? »","choices":["Rien à déclarer","La Folie des grandeurs","Le Flic de Beverly Hills","Les Dents de la mer"],"answer":"Rien à déclarer","time":15},{"section":"🎬 Cinéma culte","type":"text","instruction":"Trouver de quel film cette phrase est issue :","question":"« Parfaitement bilingue, hein ? »","choices":["L’Aventure, c’est l’aventure","Le Pacha","Les Tontons flingueurs","SOS Fantômes"],"answer":"L’Aventure, c’est l’aventure","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui porte un chapeau acheté à Tulum ?","choices":["Agathe","Julien","Johann Wayne"],"answer":"Julien","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui est mon agent de voyage de tutelle ?","choices":["Agathe","Julien"],"answer":"Agathe","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui aime les cactus ?","choices":["Agathe","Julien","Jacques Dutronc"],"answer":"Julien","time":15,"answers":["Julien","Jacques Dutronc"]},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui appelle tout le monde “mon loulou” ?","choices":["Agathe","Julien","Riri","Fifi","Loulou"],"answer":"Julien","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui est malade en bateau ?","choices":["Agathe","Julien","Le capitaine Haddock"],"answer":"Agathe","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui adore taper sur des seaux à champagne ?","choices":["Agathe","Julien"],"answer":"Julien","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui dit : « Il faut absolument qu’on goûte ça » ?","choices":["Agathe","Julien"],"answer":"Julien","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui a un couteau tatoué sur le bras ?","choices":["Agathe","Julien"],"answer":"Julien","time":15},{"section":"❤️ Julien ou Agathe ?","type":"text","instruction":"","question":"Qui a été tué par le homard ?","choices":["Agathe","Julien","Omar Raddad"],"answer":"Agathe","time":15},{"section":"📸 Photos","type":"image","instruction":"","question":"Où a été prise cette photo ?","choices":["Cebu aux Philippines","Tulum au Mexique","Marrakech au Maroc","Bali en Indonésie"],"answer":"Tulum au Mexique","time":15,"image":"assets/tulum_restaurant.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"Où cette photo a-t-elle été prise ?","choices":["Saint-Tropez","Calvi","Marrakech","Ibiza"],"answer":"Marrakech","time":15,"image":"assets/marrakech_pool.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"Dans ce restaurant, nous avons mangé le meilleur…","choices":["Carpaccio de bœuf","Canard laqué","Crocodile","Tajine d’agneau"],"answer":"Canard laqué","time":15,"image":"assets/canard_laque.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"Cette photo a été prise à…","choices":["Nyon","Lausanne","À quatre pattes","Montreux"],"answer":"Nyon","time":15,"image":"assets/nyon.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"La fille qui porte le panneau est…","choices":["Monica Bellucci","La reine d’Angleterre","Une Croate qui n’a rien demandé à personne","Dua Lipa incognito"],"answer":"Une Croate qui n’a rien demandé à personne","time":15,"image":"assets/croate.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"Cette photo a été prise…","choices":["Aux Philippines","À Tulum","Sur le Lac Léman","En Croatie"],"answer":"Aux Philippines","time":15,"image":"assets/philippines.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"Où cette photo a-t-elle été prise ?","choices":["Marrakech","Tulum","Croatie","Saint-Tropez"],"answer":"Marrakech","time":15,"image":"assets/marrakech_nuit.jpg"},{"section":"📸 Photos","type":"image","instruction":"","question":"C’est…","choices":["Un arbre à came","Un arbre à couilles","Un dessert","Un bijou de famille"],"answer":"Un dessert","time":15,"image":"assets/dessert.jpg"},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["One More Time — Daft Punk","Music Sounds Better With You — Stardust","Lady — Modjo","Starlight — The Supermen Lovers"],"answer":"Music Sounds Better With You — Stardust","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Lady — Modjo","World Hold On — Bob Sinclar","D.A.N.C.E. — Justice","Freed From Desire — Gala"],"answer":"Lady — Modjo","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Love Generation — Bob Sinclar","World Hold On — Bob Sinclar","One More Time — Daft Punk","Calabria 2007 — Enur"],"answer":"World Hold On — Bob Sinclar","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Get Lucky — Daft Punk","Around The World — Daft Punk","One More Time — Daft Punk","Da Funk — Daft Punk"],"answer":"One More Time — Daft Punk","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Freed From Desire — Gala","Calabria 2007 — Enur","Pedro","D.A.N.C.E. — Justice"],"answer":"Freed From Desire — Gala","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Safe and Sound — Justice","D.A.N.C.E. — Justice","Genesis — Justice","Starlight — The Supermen Lovers"],"answer":"D.A.N.C.E. — Justice","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Starlight — The Supermen Lovers","Lady — Modjo","Music Sounds Better With You — Stardust","Sing It Back — Moloko"],"answer":"Starlight — The Supermen Lovers","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Cola — CamelPhat","Losing It — Fisher","Turn Off The Lights — Fisher","Piece Of Your Heart — Meduza"],"answer":"Losing It — Fisher","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Wake Me Up — Avicii","The Nights — Avicii","Levels — Avicii","Summer — Calvin Harris"],"answer":"Levels — Avicii","time":20},{"section":"🎧 Blind test","type":"music","instruction":"","question":"🎧 Blind test : quel est ce morceau ?","choices":["Pedro","On The Floor — Jennifer Lopez","Freed From Desire — Gala","Calabria 2007 — Enur"],"answer":"Calabria 2007 — Enur","time":20}];
+const ADMIN_CODE = "LOULOU2026";
+const GAME = "LOULOU";
+const app = initializeApp(firebaseConfig);
+
+
+let db;
+let currentTeamId = localStorage.getItem("loulousTeamId") || "";
+let currentTeam = JSON.parse(localStorage.getItem("loulousTeam") || "null");
+let selectedAnswer = null;
+let currentQuestionIndex = -1;
+let currentQuestion = null;
+let timerId = null;
+let alreadyScoredQuestion = new Set();
+let playerStateUnsubscribe = null;
+let isAdminMode = false;
+let currentQuestionPosition = -1;
+let currentQuestionOrder = [];
+let adminTimerId = null;
+let adminRevealSentFor = -1;
+let answerSubmitted = false;
+let warningTimerId = null;
+let pendingQuestionPosition = -1;
+let resultShownFor = -1;
+let deadlineWatcherId = null;
+let deadlineRevealSentFor = -1;
+let adminTimerQuestionKey = "";
+let localCorrectionShownFor = -1;
+let earlyFinishUnsubscribe = null;
+let earlyFinishQuestionIndex = -1;
+
+window.show = id => {
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+};
+
+async function boot(){
+  try{
+    db = getDatabase(app);
+    document.getElementById("connectionStatus").textContent = "✅ Jeu connecté";
+    await ensureGame();
+    subscribeCounts();
+    if(localStorage.getItem("loulousRole") === "player" && currentTeamId && currentTeam){
+      teamLabel.textContent = currentTeam.name + " · " + currentTeam.group;
+      subscribePlayer();
+    }
+  }catch(e){
+    document.getElementById("connectionStatus").textContent = "❌ Connexion impossible : " + e.message;
+  }
+}
+
+async function ensureGame(){
+  const gameRef = ref(db, "games/"+GAME+"/state");
+  const snap = await get(gameRef);
+  if(!snap.exists()){
+    await set(gameRef, {status:"lobby",questionIndex:-1,questionPosition:-1,questionOrder:[],reveal:false,updatedAt:Date.now()});
+  }
+}
+
+function subscribeCounts(){
+  onValue(ref(db,"games/"+GAME+"/teams"), snap => {
+    const teams = snap.val() || {};
+    const count = Object.keys(teams).length;
+    teamCount.textContent = count;
+    adminTeams.textContent = count;
+  });
+}
+
+window.joinGame = async function(){
+  const errorBox = document.getElementById("joinError");
+  const button = document.getElementById("joinButton");
+  const nameInput = document.getElementById("teamName");
+  const groupInput = document.getElementById("teamGroup");
+  const codeInput = document.getElementById("gameCode");
+  errorBox.classList.remove("hidden");
+  errorBox.textContent = "Inscription en cours…";
+  button.disabled = true;
+  try {
+    if(!db) throw new Error("Le jeu n’est pas encore connecté.");
+    const name = nameInput.value.trim();
+    const group = groupInput.value;
+    const code = codeInput.value.trim().toUpperCase();
+    if(!name) throw new Error("Donnez un nom à votre équipe.");
+    if(code !== GAME) throw new Error("Le code de la partie est incorrect.");
+    currentTeam = {name,group,score:0,joinedAt:Date.now()};
+
+    // Inscription via l’API REST Firebase avec délai maximal de 12 secondes.
+    // Cette méthode évite qu’un clic reste bloqué indéfiniment si le SDK perd la connexion.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+    let response;
+    try {
+      response = await fetch(
+        firebaseConfig.databaseURL + "/games/" + GAME + "/teams.json",
+        {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(currentTeam),
+          signal: controller.signal
+        }
+      );
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    if(!response.ok){
+      const details = await response.text();
+      throw new Error("Firebase refuse l’inscription (" + response.status + ") : " + details);
+    }
+
+    const result = await response.json();
+    currentTeamId = result && result.name;
+    if(!currentTeamId) throw new Error("Firebase n’a pas renvoyé l’identifiant de l’équipe.");
+
+    localStorage.setItem("loulousTeamId",currentTeamId);
+    localStorage.setItem("loulousTeam",JSON.stringify(currentTeam));
+    localStorage.setItem("loulousRole","player");
+    isAdminMode = false;
+    document.getElementById("teamLabel").textContent = name+" · "+group;
+    errorBox.classList.add("hidden");
+    show("lobby");
+    subscribePlayer();
+  } catch(e) {
+    console.error("Erreur inscription", e);
+    errorBox.textContent = "❌ " + (e && e.message ? e.message : "Inscription impossible");
+  } finally {
+    button.disabled = false;
+  }
+};
+document.getElementById("joinButton").addEventListener("click", window.joinGame);
+
+function subscribePlayer(){
+  if(playerStateUnsubscribe) playerStateUnsubscribe();
+  playerStateUnsubscribe = onValue(ref(db,"games/"+GAME+"/state"), async snap => {
+    if(isAdminMode) return;
+    const state=snap.val()||{};
+    if(state.resetAt && currentTeam && state.resetAt > (currentTeam.joinedAt||0)){
+      localStorage.removeItem("loulousTeamId");
+      localStorage.removeItem("loulousTeam");
+      localStorage.removeItem("loulousRole");
+      currentTeamId=""; currentTeam=null; currentQuestion=null;
+      joinError.textContent="La partie a été réinitialisée. Inscrivez de nouveau votre équipe.";
+      joinError.classList.remove("hidden");
+      show("join");
+      return;
+    }
+    if(state.status==="ranking"){ loadRanking(false); return; }
+    if(state.status==="ended"){
+      await showEndedScreen();
+      return;
+    }
+    currentQuestionOrder = normaliseOrder(state.questionOrder);
+
+    if(state.status==="warning"){
+      stopDeadlineWatcher();
+      showSpeedWarning(state);
+      return;
+    }
+
+    const pos = state.questionPosition ?? -1;
+    if(state.status==="playing" && state.questionIndex>=0 && !state.reveal){
+      startDeadlineWatcher(state);
+      watchForAllAnswers(state);
+    }else{
+      stopDeadlineWatcher();
+      if(!isAdminMode) stopEarlyFinishWatcher();
+    }
+
+    if(state.questionIndex>=0 && pos!==currentQuestionPosition && !state.reveal){
+      currentQuestionIndex=state.questionIndex;
+      currentQuestionPosition=pos;
+      loadQuestion(currentQuestionIndex,state);
+    }
+    if(state.reveal && currentQuestion && localCorrectionShownFor!==state.questionIndex){
+      stopDeadlineWatcher();
+      localCorrectionShownFor=state.questionIndex;
+      await revealPlayer();
+    }
+  });
+}
+
+function stopDeadlineWatcher(){
+  if(deadlineWatcherId){
+    clearInterval(deadlineWatcherId);
+    deadlineWatcherId=null;
+  }
+}
+
+function startDeadlineWatcher(state){
+  stopDeadlineWatcher();
+  const index=state.questionIndex;
+  const q=questions[index];
+  const startedAt=state.startedAt||Date.now();
+  const duration=(q?.time||15)*1000;
+  deadlineRevealSentFor=-1;
+  const check=async()=>{
+    const remaining=duration-(Date.now()-startedAt);
+    if(remaining<=0){
+      stopDeadlineWatcher();
+      if(deadlineRevealSentFor!==index){
+        deadlineRevealSentFor=index;
+        try{
+          if(currentTeamId && currentQuestion && !answerSubmitted) await sendAnswer(false);
+          await triggerAutomaticReveal(index);
+          if(currentQuestion && localCorrectionShownFor!==index){
+            localCorrectionShownFor=index;
+            await revealPlayer();
+          }
+        }catch(error){
+          console.error("Correction automatique impossible",error);
+        }
+      }
+    }
+  };
+  check();
+  deadlineWatcherId=setInterval(check,250);
+}
+
+function showSpeedWarning(state){
+  clearInterval(warningTimerId);
+  const q=questions[state.pendingQuestionIndex];
+  warningTitle.textContent="Question de rapidité !";
+  warningText.textContent="Seuls les trois premiers à répondre correctement gagneront un point.";
+  show("speedWarning");
+  const started=state.warningStartedAt||Date.now();
+  const tick=()=>{
+    const left=Math.max(0,5-Math.floor((Date.now()-started)/1000));
+    warningCount.textContent=left;
+    if(left<=0) clearInterval(warningTimerId);
+  };
+  tick();
+  warningTimerId=setInterval(tick,200);
+}
+function normaliseOrder(order){
+  if(Array.isArray(order)) return order.map(Number);
+  if(order && typeof order==="object") return Object.values(order).map(Number);
+  return [];
+}
+
+function shuffleArray(values){
+  const a=[...values];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function isCorrectAnswer(question, answer){
+  const accepted = Array.isArray(question.answers) ? question.answers : [question.answer];
+  return accepted.includes(answer);
+}
+
+function musicIsStrictlyAtEnd(order){
+  const normalized=normaliseOrder(order);
+  if(normalized.length!==questions.length) return false;
+  let musicStarted=false;
+  for(const index of normalized){
+    const isMusic=questions[index]?.type==="music";
+    if(isMusic) musicStarted=true;
+    else if(musicStarted) return false;
+  }
+  return true;
+}
+
+function buildQuestionOrder(){
+  return questions.map((_,index)=>index);
+}
+
+function loadQuestion(index,state={}){
+  currentQuestion = questions[index];
+  currentQuestionPosition = state.questionPosition ?? currentQuestionPosition;
+  selectedAnswer = null;
+  answerSubmitted = false;
+  questionSection.textContent = currentQuestion.section;
+  questionNumber.textContent = (currentQuestionPosition+1)+" / "+questions.length;
+  questionInstruction.textContent = currentQuestion.instruction || "";
+  questionText.textContent = currentQuestion.question;
+  questionMedia.innerHTML = "";
+  if(currentQuestion.type==="image" && currentQuestion.image){
+    const img=document.createElement("img");img.src=currentQuestion.image;img.className="photo";questionMedia.appendChild(img);
+  }
+  if(currentQuestion.type==="music"){
+    questionMedia.innerHTML='<div class="musicbox">🎧<div class="small">Lancez l’extrait sur la sono</div></div>';
+  }
+  answers.innerHTML="";
+  playerAnswerStatus.classList.add("hidden");
+  shuffleArray(currentQuestion.choices).forEach(choice=>{
+    const b=document.createElement("button");
+    b.className="answer"; b.textContent=choice;
+    b.onclick=async()=>{
+      if(answerSubmitted) return;
+      document.querySelectorAll(".answer").forEach(x=>x.disabled=true);
+      b.classList.add("selected");
+      selectedAnswer=choice;
+      await sendAnswer(false);
+      playerAnswerStatus.classList.remove("hidden");
+    };
+    answers.appendChild(b);
+  });
+  show("question");
+  startTimer(currentQuestion.time||15,state.startedAt||Date.now());
+}
+
+function startTimer(seconds,startedAt){
+  clearInterval(timerId);
+  const updateClock=()=>{
+    const elapsed=Math.floor((Date.now()-startedAt)/1000);
+    const t=Math.max(0,seconds-elapsed);
+    timer.textContent=t;
+    if(t<=0){
+      clearInterval(timerId);
+      (async()=>{
+        try{
+          if(!answerSubmitted) await sendAnswer(false);
+          await triggerAutomaticReveal(currentQuestionIndex);
+          if(currentQuestion && localCorrectionShownFor!==currentQuestionIndex){
+            localCorrectionShownFor=currentQuestionIndex;
+            await revealPlayer();
+          }
+        }catch(error){
+          console.error("Correction automatique impossible",error);
+          correctionTitle.textContent="Correction";
+          correctAnswer.textContent=Array.isArray(currentQuestion?.answers)?currentQuestion.answers.join(" ou "):(currentQuestion?.answer||"");
+          pointsEarned.textContent="+0";
+          show("correction");
+        }
+      })();
+    }
+  };
+  updateClock();
+  timerId=setInterval(updateClock,250);
+}
+
+window.sendAnswer = async function(showWaiting=true){
+  if(answerSubmitted || !currentTeamId || !currentQuestion) return;
+  answerSubmitted=true;
+  document.querySelectorAll(".answer").forEach(x=>x.disabled=true);
+  // Ne pas arrêter timerId : le décompte doit continuer jusqu'à zéro.
+  await set(ref(db,`games/${GAME}/answers/${currentQuestionIndex}/${currentTeamId}`),{
+    answer:selectedAnswer||"",submittedAt:Date.now()
+  });
+  if(showWaiting) show("waitingAnswer");
+};
+
+async function triggerAutomaticReveal(index){
+  await finaliseQuestion(index);
+  await update(ref(db,"games/"+GAME+"/state"),{reveal:true,updatedAt:Date.now()});
+}
+
+async function finaliseQuestion(index){
+  const resultRef=ref(db,`games/${GAME}/results/${index}`);
+  const existing=await get(resultRef);
+  if(existing.exists()){
+    const value=existing.val();
+    await awardResultPoints(index,value);
+    return (await get(resultRef)).val();
+  }
+
+  const q=questions[index];
+  const [answersSnap,teamsSnap,stateSnap]=await Promise.all([
+    get(ref(db,`games/${GAME}/answers/${index}`)),
+    get(ref(db,`games/${GAME}/teams`)),
+    get(ref(db,`games/${GAME}/state`))
+  ]);
+  const answerMap=answersSnap.val()||{};
+  const teams=teamsSnap.val()||{};
+  const state=stateSnap.val()||{};
+  const correct=Object.entries(answerMap)
+    .filter(([teamId,a])=>isCorrectAnswer(q,a.answer))
+    .map(([teamId,a])=>({
+      teamId,
+      name:teams[teamId]?.name||"Équipe",
+      submittedAt:a.submittedAt||Number.MAX_SAFE_INTEGER,
+      responseMs:Math.max(0,(a.submittedAt||0)-(state.startedAt||0))
+    }))
+    .sort((a,b)=>a.submittedAt-b.submittedAt);
+
+  let pointScale=[];
+  if(q.speedChallenge) pointScale=[1,1,1];
+
+  const winners=pointScale.map((points,i)=>correct[i]?{...correct[i],points}:null).filter(Boolean);
+  const pointsByTeam={};
+
+  if(pointScale.length){
+    winners.forEach(w=>pointsByTeam[w.teamId]=w.points);
+  }else{
+    correct.forEach(w=>pointsByTeam[w.teamId]=1);
+  }
+
+  const stats=calculateQuestionStats(q,answerMap,teams);
+  const result={
+    correctAnswer:q.answer,
+    winners,
+    pointsByTeam,
+    competitive:Boolean(pointScale.length),
+    music:false,
+    stats,
+    awarded:false,
+    finalisedAt:Date.now()
+  };
+
+  const transaction=await runTransaction(resultRef,current=>current||result);
+  const saved=transaction.snapshot.val();
+  if(!saved.awarded) await awardResultPoints(index,saved);
+  return (await get(resultRef)).val();
+}
+
+async function awardResultPoints(index,result){
+  const entries=Object.entries(result.pointsByTeam||{});
+  for(const [teamId,points] of entries){
+    const awardRef=ref(db,`games/${GAME}/awards/${index}/${teamId}`);
+    const awardTx=await runTransaction(awardRef,current=>current==null?Number(points||0):undefined);
+    if(awardTx.committed){
+      const scoreRef=ref(db,`games/${GAME}/teams/${teamId}/score`);
+      await runTransaction(scoreRef,current=>(Number(current)||0)+Number(points||0));
+    }
+  }
+  await update(ref(db,`games/${GAME}/results/${index}`),{awarded:true,awardedAt:Date.now()});
+}
+function celebrateCorrectAnswer(){
+  celebrationLayer.innerHTML="";
+  const colors=["#ef6f68","#f5b64f","#4fb6b5","#fff5df","#bd4f7c","#173e59"];
+  for(let i=0;i<80;i++){
+    const piece=document.createElement("span");
+    piece.className="confetti-piece";
+    piece.style.left=Math.random()*100+"vw";
+    piece.style.background=colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDelay=(Math.random()*.35)+"s";
+    piece.style.setProperty("--drift",((Math.random()-.5)*45)+"vw");
+    piece.style.transform=`rotate(${Math.random()*360}deg)`;
+    celebrationLayer.appendChild(piece);
+  }
+  setTimeout(()=>{ celebrationLayer.innerHTML=""; },2100);
+}
+
+function renderCorrectionChoices(question,given){
+  correctionChoices.innerHTML="";
+  question.choices.forEach(choice=>{
+    const item=document.createElement("div");
+    item.className="answer "+(isCorrectAnswer(question,choice)?"correct":"wrong");
+    item.textContent=choice;
+    if(choice===given) item.style.outline="5px solid var(--sun)";
+    correctionChoices.appendChild(item);
+  });
+}
+
+function calculateQuestionStats(question,answersMap,teamsMap){
+  const answers=Object.values(answersMap||{});
+  const teamCount=Object.keys(teamsMap||{}).length;
+  const correctCount=answers.filter(item=>isCorrectAnswer(question,item.answer)).length;
+  const wrongCount=answers.filter(item=>!isCorrectAnswer(question,item.answer)).length;
+  const receivedCount=answers.length;
+  const noAnswerCount=Math.max(0,teamCount-receivedCount);
+  return {correctCount,wrongCount,receivedCount,noAnswerCount,teamCount};
+}
+
+function renderAdminStats(stats){
+  adminStats.innerHTML=`
+    <h3>Résultats de la question</h3>
+    <div class="row"><div>✅</div><div><b>Bonnes réponses</b></div><b>${stats.correctCount}</b></div>
+    <div class="row"><div>❌</div><div><b>Mauvaises réponses</b></div><b>${stats.wrongCount}</b></div>
+    <div class="row"><div>⏱</div><div><b>Sans réponse</b></div><b>${stats.noAnswerCount}</b></div>
+    <div class="row"><div>📊</div><div><b>Réponses reçues</b></div><b>${stats.receivedCount} / ${stats.teamCount}</b></div>
+  `;
+}
+
+function renderWinners(container,result){
+  container.innerHTML="";
+  if(!result?.competitive) return;
+  const title=document.createElement("h3");
+  title.textContent="Les plus rapides";
+  container.appendChild(title);
+  if(!result.winners?.length){
+    const p=document.createElement("p");p.textContent="Aucune bonne réponse.";container.appendChild(p);return;
+  }
+  result.winners.forEach((winner,i)=>{
+    const row=document.createElement("div");row.className="row";
+    row.innerHTML=`<div>${["🥇","🥈","🥉","4e","5e"][i]||i+1}</div><div><b>${escapeHtml(winner.name)}</b><small>${(winner.responseMs/1000).toFixed(2)} s</small></div><b>+${winner.points}</b>`;
+    container.appendChild(row);
+  });
+}
+
+async function revealPlayer(){
+  if(!currentQuestion) return;
+  const result=await finaliseQuestion(currentQuestionIndex);
+  const answerSnap=await get(ref(db,`games/${GAME}/answers/${currentQuestionIndex}/${currentTeamId}`));
+  const given=answerSnap.val()?.answer||"";
+  const points=Number(result.pointsByTeam?.[currentTeamId]||0);
+  const ok=isCorrectAnswer(currentQuestion,given);
+  correctionTitle.textContent=ok?"Bonne réponse":"Mauvaise réponse";
+  correctAnswer.textContent=Array.isArray(currentQuestion.answers)?currentQuestion.answers.join(" ou "):currentQuestion.answer;
+  pointsEarned.textContent=points?`+${points}`:"+0";
+  renderCorrectionChoices(currentQuestion,given);
+  renderWinners(questionWinners,result);
+  localCorrectionShownFor=currentQuestionIndex;
+  show("correction");
+  if(ok) celebrateCorrectAnswer();
+}
+window.openAdmin = async function(){
+  if(adminCode.value!==ADMIN_CODE) return alert("Code incorrect.");
+  isAdminMode = true;
+  localStorage.setItem("loulousRole","admin");
+  if(playerStateUnsubscribe){
+    playerStateUnsubscribe();
+    playerStateUnsubscribe = null;
+  }
+  clearInterval(timerId);
+  currentQuestion = null;
+  show("admin");
+  publicUrl.textContent=location.href.split("#")[0];
+  qrCode.src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(location.href.split("#")[0]);
+  subscribeAdmin();
+};
+
+function stopEarlyFinishWatcher(){
+  if(earlyFinishUnsubscribe){
+    earlyFinishUnsubscribe();
+    earlyFinishUnsubscribe=null;
+  }
+  earlyFinishQuestionIndex=-1;
+}
+
+function watchForAllAnswers(state){
+  stopEarlyFinishWatcher();
+  const index=state.questionIndex;
+  const expectedTeams=Number(state.expectedTeams||0);
+  if(index<0 || expectedTeams<=0 || state.reveal || state.status!=="playing") return;
+  earlyFinishQuestionIndex=index;
+  earlyFinishUnsubscribe=onValue(ref(db,`games/${GAME}/answers/${index}`),async snap=>{
+    if(earlyFinishQuestionIndex!==index) return;
+    const received=Object.keys(snap.val()||{}).length;
+    if(received>=expectedTeams){
+      stopEarlyFinishWatcher();
+      try{
+        await triggerAutomaticReveal(index);
+      }catch(error){
+        console.error("Fin anticipée impossible",error);
+      }
+    }
+  });
+}
+
+function subscribeAdmin(){
+  onValue(ref(db,"games/"+GAME+"/state"), async snap=>{
+    const state=snap.val()||{};
+    currentQuestionIndex=state.questionIndex??-1;
+    currentQuestionPosition=state.questionPosition??-1;
+    currentQuestionOrder=normaliseOrder(state.questionOrder);
+    clearInterval(adminTimerId);
+    adminCorrection.textContent="";
+    adminStats.innerHTML="";
+    adminWinners.innerHTML="";
+
+    if(state.status==="ended"){
+      stopEarlyFinishWatcher();
+      adminTimer.textContent="FIN";
+      adminQuestionTitle.textContent="Partie terminée";
+      adminQuestionMeta.textContent="Toutes les questions ont été jouées.";
+      adminNextButton.textContent="Partie terminée";
+      adminNextButton.disabled=true;
+      return;
+    }
+
+    if(state.status==="warning"){
+      stopEarlyFinishWatcher();
+      adminAnswers.textContent="0";
+      adminStats.innerHTML="";
+      const q=questions[state.pendingQuestionIndex];
+      adminQuestionTitle.textContent="Question de rapidité";
+      adminQuestionMeta.textContent="Les trois premiers auront un point";
+      startAdminWarning(state);
+      adminNextButton.disabled=true;
+      return;
+    }
+
+    adminNextButton.disabled=false;
+    if(currentQuestionIndex>=0){
+      const q=questions[currentQuestionIndex];
+      adminQuestionTitle.textContent=q.question;
+      adminQuestionMeta.textContent=q.section+" · question "+(currentQuestionPosition+1)+" / "+questions.length;
+      adminChoices.innerHTML="<h3>Réponses proposées</h3>"+q.choices.map((choice,i)=>`<div class="row"><div>${String.fromCharCode(65+i)}</div><div><b>${escapeHtml(choice)}</b></div></div>`).join("");
+      adminNextButton.textContent=currentQuestionPosition===questions.length-1 && state.reveal?"Terminer la partie":"Question suivante";
+      if(state.reveal){
+        stopEarlyFinishWatcher();
+        adminTimer.textContent="0";
+        const result=await finaliseQuestion(currentQuestionIndex);
+        adminCorrection.textContent="Correction : "+(Array.isArray(q.answers)?q.answers.join(" ou "):q.answer);
+        renderAdminStats(result.stats||{correctCount:0,wrongCount:0,noAnswerCount:0,receivedCount:0,teamCount:0});
+        renderWinners(adminWinners,result);
+      }else{
+        startAdminTimer(q.time||15,state.startedAt||Date.now(),currentQuestionIndex);
+        watchForAllAnswers(state);
+      }
+      subscribeAnswerCount(currentQuestionIndex);
+    }else{
+      adminTimer.textContent="--";
+      adminChoices.innerHTML="";
+      adminNextButton.textContent="Lancer la partie";
+    }
+  });
+}
+
+function startAdminWarning(state){
+  clearInterval(adminTimerId);
+  adminTimerId=null;
+  adminTimerQuestionKey="";
+  const tick=async()=>{
+    const left=Math.max(0,5-Math.floor((Date.now()-(state.warningStartedAt||Date.now()))/1000));
+    adminTimer.textContent=left;
+    if(left<=0){
+      clearInterval(adminTimerId);
+      const live=await get(ref(db,"games/"+GAME+"/state"));
+      if(live.val()?.status==="warning"){
+        await set(ref(db,"games/"+GAME+"/state"),{
+          status:"playing",
+          questionIndex:state.pendingQuestionIndex,
+          questionPosition:state.pendingQuestionPosition,
+          questionOrder:normaliseOrder(state.questionOrder),
+          reveal:false,
+          startedAt:Date.now(),
+          expectedTeams:Number(state.expectedTeams||0),
+          updatedAt:Date.now()
+        });
+      }
+    }
+  };
+  tick();
+  adminTimerId=setInterval(tick,200);
+}
+function startAdminTimer(seconds,startedAt,index){
+  const key=`${index}:${startedAt}`;
+  if(adminTimerQuestionKey===key && adminTimerId) return;
+  clearInterval(adminTimerId);
+  adminTimerQuestionKey=key;
+  adminRevealSentFor=-1;
+  const updateClock=async()=>{
+    const elapsed=Math.floor((Date.now()-startedAt)/1000);
+    const t=Math.max(0,seconds-elapsed);
+    adminTimer.textContent=t;
+    if(t<=0){
+      clearInterval(adminTimerId);
+      adminTimerId=null;
+      if(adminRevealSentFor!==index){
+        adminRevealSentFor=index;
+        try{
+          await triggerAutomaticReveal(index);
+        }catch(error){
+          console.error("Correction automatique administrateur impossible",error);
+        }
+      }
+    }
+  };
+  updateClock();
+  adminTimerId=setInterval(updateClock,250);
+}
+
+let answerCountUnsub = null;
+let answerCountQuestionIndex = -1;
+function subscribeAnswerCount(index){
+  if(answerCountUnsub){
+    answerCountUnsub();
+    answerCountUnsub=null;
+  }
+  answerCountQuestionIndex=index;
+  adminAnswers.textContent="0";
+  answerCountUnsub=onValue(
+    ref(db,`games/${GAME}/answers/${index}`),
+    snap=>{
+      if(answerCountQuestionIndex!==index) return;
+      const answersForQuestion=snap.val()||{};
+      adminAnswers.textContent=String(Object.keys(answersForQuestion).length);
+    },
+    error=>{
+      console.error("Compteur de réponses indisponible",error);
+      adminAnswers.textContent="!";
+    }
+  );
+}
+
+window.adminNext = async function(){
+  const stateRef=ref(db,"games/"+GAME+"/state");
+  const snap=await get(stateRef);
+  const state=snap.val()||{};
+  let order=normaliseOrder(state.questionOrder);
+  const currentPos=state.questionPosition??-1;
+  if(currentPos<0 || order.length!==questions.length || order.some((value,index)=>Number(value)!==index)) order=buildQuestionOrder();
+  const nextPos=currentPos+1;
+  if(nextPos>=order.length){
+    await update(stateRef,{status:"ended",reveal:true,endedAt:Date.now(),updatedAt:Date.now()});
+    return;
+  }
+  const nextIndex=order[nextPos];
+  const q=questions[nextIndex];
+  const teamsSnap=await get(ref(db,`games/${GAME}/teams`));
+  const expectedTeams=Object.keys(teamsSnap.val()||{}).length;
+  if(q.speedChallenge){
+    await set(stateRef,{
+      status:"warning",
+      questionIndex:state.questionIndex??-1,
+      questionPosition:currentPos,
+      pendingQuestionIndex:nextIndex,
+      pendingQuestionPosition:nextPos,
+      questionOrder:order,
+      reveal:false,
+      warningStartedAt:Date.now(),
+      expectedTeams,
+      updatedAt:Date.now()
+    });
+  }else{
+    await set(stateRef,{
+      status:"playing",
+      questionIndex:nextIndex,
+      questionPosition:nextPos,
+      questionOrder:order,
+      reveal:false,
+      startedAt:Date.now(),
+      expectedTeams,
+      updatedAt:Date.now()
+    });
+  }
+};
+window.adminShowRanking = async function(){
+  await update(ref(db,"games/"+GAME+"/state"),{status:"ranking",updatedAt:Date.now()});
+  loadRanking(true);
+};
+
+window.adminReset = async function(){
+  if(!confirm("Réinitialiser toute la partie et supprimer toutes les équipes inscrites ?")) return;
+  clearInterval(adminTimerId);
+  adminTimerId=null;
+  adminTimerQuestionKey="";
+  await remove(ref(db,"games/"+GAME));
+  await set(ref(db,"games/"+GAME+"/state"),{
+    status:"lobby",
+    questionIndex:-1,
+    questionPosition:-1,
+    questionOrder:questions.map((_,index)=>index),
+    pendingQuestionIndex:-1,
+    pendingQuestionPosition:-1,
+    reveal:false,
+    resetAt:Date.now(),
+    updatedAt:Date.now()
+  });
+  adminQuestionTitle.textContent="Prêt à démarrer";
+  adminQuestionMeta.textContent="";
+  adminCorrection.textContent="";
+  adminStats.innerHTML="";
+  adminTimer.textContent="--";
+  adminAnswers.textContent="0";
+  adminNextButton.textContent="Lancer la partie";
+  adminNextButton.disabled=false;
+};
+
+async function getSortedTeams(){
+  const snap=await get(ref(db,"games/"+GAME+"/teams"));
+  return Object.values(snap.val()||{}).sort((a,b)=>(b.score||0)-(a.score||0));
+}
+
+function rankingHtml(teams){
+  if(!teams.length) return '<div class="notice">Aucune équipe classée.</div>';
+  return teams.map((t,i)=>`<div class="row"><div>${["🥇","🥈","🥉"][i]||i+1}</div><div><b>${escapeHtml(t.name)}</b><small>${escapeHtml(t.group)}</small></div><b>${t.score||0} pts</b></div>`).join("");
+}
+
+async function loadRanking(adminMode){
+  const teams=await getSortedTeams();
+  rankingRows.innerHTML=rankingHtml(teams);
+  show("ranking");
+}
+
+async function showEndedScreen(){
+  show("ended");
+  finalRankingButton.disabled=false;
+  finalRankingButton.textContent="Actualiser le classement";
+  finalRankingRows.classList.remove("hidden");
+  finalRankingRows.innerHTML='<div class="notice">Chargement du classement…</div>';
+  await showFinalRanking();
+}
+
+window.showFinalRanking = async function(){
+  finalRankingButton.disabled=true;
+  finalRankingButton.textContent="Chargement…";
+  try{
+    const teams=await getSortedTeams();
+    finalRankingRows.innerHTML="<h2>Classement final</h2>"+rankingHtml(teams);
+    finalRankingRows.classList.remove("hidden");
+    finalRankingButton.disabled=false;
+    finalRankingButton.textContent="Actualiser le classement";
+  }catch(error){
+    console.error("Classement final indisponible",error);
+    finalRankingRows.innerHTML='<div class="notice">Impossible de charger le classement. Appuyez sur Réessayer.</div>';
+    finalRankingRows.classList.remove("hidden");
+    finalRankingButton.disabled=false;
+    finalRankingButton.textContent="Réessayer";
+  }
+};
+
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+finalRankingButton?.addEventListener("click",()=>showFinalRanking());
+boot();
+</script>
+</body>
+</html>
